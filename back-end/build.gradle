@@ -1,0 +1,24 @@
+
+plugins {
+    id 'groovy'                     // For java and groovy projects
+    id 'war'                        // For generating war (web app archive) files
+    id 'org.gretty' version '3.0.1' // Web app development plugin
+}
+
+wrapper {
+    gradleVersion = '6.2.2'
+    distributionType = Wrapper.DistributionType.ALL
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+// project.group = ...
+// project.version = ...
+
+repositories {
+    jcenter()
+    maven {
+        url 'https://maven.restlet.talend.com/'
+    }
+}
