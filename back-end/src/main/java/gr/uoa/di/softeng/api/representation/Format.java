@@ -41,7 +41,7 @@ public enum Format implements RepresentationGenerator {
         }
     },
 
-    CSV {
+    XML {
 
         public Representation generateRepresentation(List<Incident> results) {
 
