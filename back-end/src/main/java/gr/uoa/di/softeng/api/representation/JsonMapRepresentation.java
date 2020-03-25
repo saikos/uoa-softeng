@@ -1,4 +1,4 @@
-package gr.uoa.di.softeng20b.api.representation;
+package gr.uoa.di.softeng.api.representation;
 
 import com.google.gson.Gson;
 import org.restlet.data.MediaType;

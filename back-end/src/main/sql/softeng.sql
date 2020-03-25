@@ -19,10 +19,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `softeng2020b`
+-- Database: `softeng`
 --
-CREATE DATABASE IF NOT EXISTS `softeng2020b` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `softeng2020b`;
+CREATE DATABASE IF NOT EXISTS `softeng` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `softeng`;
 
 -- --------------------------------------------------------
 

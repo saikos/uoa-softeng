@@ -1,4 +1,4 @@
-package gr.uoa.di.softeng20b.conf;
+package gr.uoa.di.softeng.conf;
 
 /**
  *

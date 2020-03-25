@@ -1,10 +1,9 @@
-package gr.uoa.di.softeng20b.data;
+package gr.uoa.di.softeng.data;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

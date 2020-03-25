@@ -11,7 +11,7 @@
 
     <context-param>
         <param-name>properties</param-name>
-        <param-value>/gr/uoa/di/softeng20b/app.properties</param-value>
+        <param-value>/gr/uoa/di/softeng/app.properties</param-value>
     </context-param>
 
     <!-- //////// -->
@@ -24,7 +24,7 @@
         <servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
         <init-param>
             <param-name>org.restlet.application</param-name>
-            <param-value>gr.uoa.di.softeng20b.api.RestfulApp</param-value>
+            <param-value>gr.uoa.di.softeng.api.RestfulApp</param-value>
         </init-param>
     </servlet>
 
@@ -35,11 +35,11 @@
     <servlet-mapping>
         <!-- Map the Restlet endpoints to /incidents/api URL -->
         <servlet-name>RestletAdapter</servlet-name>
-        <url-pattern>/softeng20b/api/*</url-pattern>
+        <url-pattern>/softeng/api/*</url-pattern>
     </servlet-mapping>
 
     <listener>
-        <listener-class>gr.uoa.di.softeng20b.conf.Listener</listener-class>
+        <listener-class>gr.uoa.di.softeng.conf.Listener</listener-class>
     </listener>
 
 </web-app>

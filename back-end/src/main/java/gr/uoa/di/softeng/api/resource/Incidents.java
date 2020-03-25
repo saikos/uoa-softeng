@@ -1,9 +1,9 @@
-package gr.uoa.di.softeng20b.api.resource;
+package gr.uoa.di.softeng.api.resource;
 
-import gr.uoa.di.softeng20b.api.representation.Format;
-import gr.uoa.di.softeng20b.conf.Configuration;
-import gr.uoa.di.softeng20b.data.DataAccess;
-import gr.uoa.di.softeng20b.data.Incident;
+import gr.uoa.di.softeng.api.representation.Format;
+import gr.uoa.di.softeng.conf.Configuration;
+import gr.uoa.di.softeng.data.DataAccess;
+import gr.uoa.di.softeng.data.Incident;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;

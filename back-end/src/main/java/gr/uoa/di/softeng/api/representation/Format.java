@@ -1,7 +1,7 @@
-package gr.uoa.di.softeng20b.api.representation;
+package gr.uoa.di.softeng.api.representation;
 
 import com.google.gson.stream.JsonWriter;
-import gr.uoa.di.softeng20b.data.Incident;
+import gr.uoa.di.softeng.data.Incident;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;

@@ -1,6 +1,6 @@
-package gr.uoa.di.softeng20b.api;
+package gr.uoa.di.softeng.api;
 
-import gr.uoa.di.softeng20b.api.resource.*;
+import gr.uoa.di.softeng.api.resource.*;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;

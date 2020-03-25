@@ -1,4 +1,4 @@
-package gr.uoa.di.softeng20b.api.resource;
+package gr.uoa.di.softeng.api.resource;
 
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;

@@ -1,6 +1,6 @@
-package gr.uoa.di.softeng20b.conf;
+package gr.uoa.di.softeng.conf;
 
-import gr.uoa.di.softeng20b.data.DataAccess;
+import gr.uoa.di.softeng.data.DataAccess;
 import java.util.Properties;
 import java.util.Set;
 

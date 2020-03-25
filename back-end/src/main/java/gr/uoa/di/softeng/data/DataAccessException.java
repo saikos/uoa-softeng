@@ -1,4 +1,4 @@
-package gr.uoa.di.softeng20b.data;
+package gr.uoa.di.softeng.data;
 
 /**
  *
