@@ -9,6 +9,6 @@
 
     ./gradlew appRun
 
-You can check that the server is up and running by visiting `http://localhost:9000/softeng/api/health-check`.
+You can check that the server is up and running by visiting `http://localhost:9000/control-center/api/health-check`.
 
-In the above URL, the port "9000" is defined in `./build.gradle` and the path "/softeng/api" in `./src/main/webapp/WEB-INF/web.xml`
+In the above URL, the port "9000" is defined in `./build.gradle` and the path "/control-center/api" in `./src/main/webapp/WEB-INF/web.xml`

@@ -35,7 +35,7 @@
     <servlet-mapping>
         <!-- Map the Restlet endpoints to /incidents/api URL -->
         <servlet-name>RestletAdapter</servlet-name>
-        <url-pattern>/softeng/api/*</url-pattern>
+        <url-pattern>/control-center/api/*</url-pattern>
     </servlet-mapping>
 
     <listener>
