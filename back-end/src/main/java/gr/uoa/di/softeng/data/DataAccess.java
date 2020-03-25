@@ -56,7 +56,7 @@ public class DataAccess {
         String sqlQuery;
         Object[] sqlParams;
 
-        if(name != null) {
+        if (name != null) {
             sqlQuery = "SELECT * FROM `incidents` WHERE `name` = ?;";
             sqlParams = new Object[] { name };
         }
@@ -73,7 +73,7 @@ public class DataAccess {
                 rs.getDate("creation_date")
             ));
         }
-        catch(Exception e) {
+        catch (Exception e) {
             throw new DataAccessException(e.getMessage(), e);
         }
     }

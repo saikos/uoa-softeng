@@ -24,7 +24,7 @@ public enum Format implements RepresentationGenerator {
             return new CustomJsonRepresentation((JsonWriter w) -> {
                 try {
                     w.beginArray(); // [
-                    for(Incident incident: results) {
+                    for (Incident incident: results) {
                         w.beginObject(); // {
                         w.name("id").value(incident.getId());
                         w.name("name").value(incident.getName());

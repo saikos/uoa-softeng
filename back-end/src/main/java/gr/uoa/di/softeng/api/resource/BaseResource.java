@@ -19,8 +19,8 @@ public class BaseResource extends ServerResource {
     static Format parseFormat(String format) {
 
         Optional<Format> optional = Arrays.stream(Format.values()).
-                filter( (Format f) -> f.name().equalsIgnoreCase(format)).
-                findFirst();
+            filter((Format f) -> f.name().equalsIgnoreCase(format)).
+            findFirst();
 
         return optional.orElse(Format.JSON);
     }
