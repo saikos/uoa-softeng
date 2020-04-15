@@ -23,9 +23,10 @@ public class RestfulApp extends Application {
 
         // CRUD actions on "incidents" resource.
         router.attach("/incidents", Incidents.class);
+        router.attach("/incidents/{name}", Incidents.class);
 
         // CRUD actions on "incident" resource.
-        router.attach("/incident", Incident.class);
+        router.attach("/incident/{id}", Incident.class);
 
         return router;
     }
