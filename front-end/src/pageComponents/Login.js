@@ -57,12 +57,14 @@ export default class Login extends Component {
             <form onSubmit={this.handleSubmit} className="d-flex justify-content-center align-items-center mt-3 mb-3">
                 <div className="form-group">
                     <label>
-                        Username <input type="text" ref={this.username} className="form-control" />
+                        Username
+                        <input type="text" ref={this.username} className="form-control" required />
                     </label>
                 </div>
                 <div className="form-group ml-2">
                     <label>
-                        Password <input type="password" ref={this.password} className="form-control" />
+                        Password
+                        <input type="password" ref={this.password} className="form-control" required />
                     </label>
                 </div>
                 <button type="submit" className="btn btn-primary ml-2">Login</button>
