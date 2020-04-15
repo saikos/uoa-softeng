@@ -21,6 +21,12 @@ public class RestfulApp extends Application {
         // Init a new (empty) database with the default admin user.
         router.attach("/reset", Reset.class);
 
+        // Authenticate the user.
+        router.attach("/login", Login.class);
+
+        // This endpoint should be available to all authenticated users.
+        router.attach("/logout", Logout.class);
+
         // CRUD actions on "incidents" resource.
         router.attach("/incidents", Incidents.class);
         router.attach("/incidents/{name}", Incidents.class);
