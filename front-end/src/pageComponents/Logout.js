@@ -27,7 +27,7 @@ export default class Logout extends Component {
             mode: 'cors',
             method: 'POST',
             headers: {
-                'X-OBSERVATORY-AUTH': this.context.username,
+                'X-CONTROL-CENTER-AUTH': this.context.username,
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
         })
