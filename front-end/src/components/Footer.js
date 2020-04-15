@@ -45,8 +45,8 @@ export default class Footer extends Component {
         });
         
         return (            
-            <div className="row">
-                <div className="col-lg-3">
+            <div className="p-3 pl-5 pr-5 border-top border-secondary d-flex justify-content-between align-items-center">
+                <div>
                     <button className="btn btn-info" onClick={this.showModal}>Confirm</button>
                     <UserConfirmationModal 
                         title="Confirm something"
@@ -55,16 +55,14 @@ export default class Footer extends Component {
                         onHide={this.hideModal}
                     />
                 </div>
-                <div className="col-lg-3">
+                <div>
                     {renderedList}
                 </div>
-                <div className="col-lg-3">
+                <div>
                     {ld.join(', ')}
                 </div>
-                <div className="col-lg-3">
-                    {lt.map(function(i) {
-                        return <b key={i}>{i}</b>;
-                    })}
+                <div>
+                    {lt.map(i => <b key={i}>{i}</b>)}
                 </div>
             </div>
         );

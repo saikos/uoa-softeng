@@ -46,14 +46,16 @@ export default class App extends Component {
             <div style={this.state.style}>
                 <UserProvider value={this.state}>
                     <Router>
-                        <div className="container">
+                        <div className="container min-vh-100 d-flex flex-column">
                             <Nav />
-                            <Route path="/" exact render={(props) => {
-                                return <h1>Welcome {this.state.username === null? 'Stranger' : this.state.username}</h1>;
-                            }}/>
-                            <Route path="/main" render={this.renderProtectedComponent(Main)} />
-                            <Route path="/login" component={Login} />
-                            <Route path="/logout" render={this.renderProtectedComponent(Logout)} />
+                            <div className="flex-grow-1">
+                                <Route path="/" exact render={(props) => {
+                                    return <h1>Welcome {this.state.username === null? 'Stranger' : this.state.username}</h1>;
+                                }}/>
+                                <Route path="/main" render={this.renderProtectedComponent(Main)} />
+                                <Route path="/login" component={Login} />
+                                <Route path="/logout" render={this.renderProtectedComponent(Logout)} />
+                            </div>
                             <Footer />
                         </div>
                     </Router>
