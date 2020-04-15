@@ -24,6 +24,7 @@ export default class Logout extends Component {
         // Perform an ajax call to logout and then clean up local storage and context state.
 
         fetch(`${apiUrl}/logout`, {
+            mode: 'cors',
             method: 'POST',
             headers: {
                 'X-OBSERVATORY-AUTH': this.context.username,
