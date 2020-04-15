@@ -33,10 +33,9 @@ public class RestfulApp extends Application {
 
         // CRUD actions on "incidents" resource.
         router.attach("/incidents", Incidents.class);
-        router.attach("/incidents/{name}", Incidents.class);
 
         // CRUD actions on "incident" resource.
-        router.attach("/incident/{id}", Incident.class);
+        router.attach("/incidents/{id}", Incident.class);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // Enable CORS for all origins (don't use this in a production service).

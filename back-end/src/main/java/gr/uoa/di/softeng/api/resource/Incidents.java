@@ -22,7 +22,7 @@ public class Incidents extends BaseResource {
     protected Representation get() throws ResourceException {
 
         // Read the optional name attribute
-        String name = getAttributeDecoded("name");
+        String name = getQueryValue("name");
 
         // Read the format query parameter
         Format format = parseFormat(getQueryValue("format"));
