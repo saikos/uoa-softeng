@@ -43,7 +43,7 @@ public class RestfulApp extends Application {
         CorsFilter corsFilter = new CorsFilter(getContext(), router);
         corsFilter.setAllowedOrigins(Set.of("*"));
         corsFilter.setAllowedCredentials(true);
-        corsFilter.setAllowedHeaders(Set.of("X-OBSERVATORY-AUTH"));
+        corsFilter.setAllowedHeaders(Set.of("X-CONTROL-CENTER-AUTH"));
         corsFilter.setDefaultAllowedMethods(Set.of(Method.GET, Method.PUT, Method.POST, Method.DELETE));
         corsFilter.setAllowingAllRequestedHeaders(true);
         corsFilter.setSkippingResourceForCorsOptions(true);
