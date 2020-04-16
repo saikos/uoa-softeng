@@ -1,3 +1,14 @@
+########################################################################################################################
+# Custom ignore rules
+
+# Ignore whole JetBrains IDEs project directories
+.idea/
+
+# Ignore IntelliJ module files
+*.iml
+
+# End of custom ignore rules
+########################################################################################################################
 
 # Created by https://www.gitignore.io/api/osx,git,vim,node,linux,emacs,windows,webstorm,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=osx,git,vim,node,linux,emacs,windows,webstorm,visualstudiocode
@@ -365,12 +376,3 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/osx,git,vim,node,linux,emacs,windows,webstorm,visualstudiocode
-
-########################################################################################################################
-# Custom ignore rules
-
-# Ignore IntelliJ project directory
-/.idea/
-
-# Ignore IntelliJ module files
-*.iml
