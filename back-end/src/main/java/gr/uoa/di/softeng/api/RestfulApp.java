@@ -21,21 +21,29 @@ public class RestfulApp extends Application {
 
         // Perform a heath check.
         router.attach("/health-check", SystemHealth.class);
-
         // Init a new (empty) database with the default admin user.
         router.attach("/reset", Reset.class);
 
         // Authenticate the user.
         router.attach("/login", Login.class);
-
         // This endpoint should be available to all authenticated users.
         router.attach("/logout", Logout.class);
 
+        // You should make the user-related REST endpoints available to admin users only (i.e. users with the admin role).
+        // CRUD actions on "users" resource.
+        router.attach("/admin/users", Users.class);
+        // CRUD actions on "user" resource.
+        router.attach("/admin/users/{userId}", User.class);
+
         // CRUD actions on "incidents" resource.
         router.attach("/incidents", Incidents.class);
-
         // CRUD actions on "incident" resource.
-        router.attach("/incidents/{id}", Incident.class);
+        router.attach("/incidents/{incidentId}", Incident.class);
+
+        // CRUD actions on "reports" resource.
+        router.attach("/incidents/{incidentId}/reports", Reports.class);
+        // CRUD actions on "report" resource.
+        router.attach("/incidents/{incidentId}/reports/{reportId}", Report.class);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // Enable CORS for all origins (don't use this in a production service).

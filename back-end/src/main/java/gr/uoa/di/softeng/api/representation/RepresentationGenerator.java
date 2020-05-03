@@ -1,6 +1,6 @@
 package gr.uoa.di.softeng.api.representation;
 
-import gr.uoa.di.softeng.data.Incident;
+import gr.uoa.di.softeng.data.model.Incident;
 import org.restlet.representation.Representation;
 import java.util.List;
 

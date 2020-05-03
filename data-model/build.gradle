@@ -1,0 +1,7 @@
+
+plugins {
+    id 'java' // Apply the java plugin to add support for Java
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11

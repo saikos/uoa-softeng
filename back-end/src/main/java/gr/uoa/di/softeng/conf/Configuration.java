@@ -13,7 +13,7 @@ public final class Configuration {
 
     private String contextPath = null;
     private Properties props = new Properties();
-    private DataAccess dataAccess = new DataAccess();
+    private DataAccess dataAccess; //!!!! = new DataAccess();
 
     private Configuration() {}
 
@@ -27,6 +27,7 @@ public final class Configuration {
         this.contextPath = contextPath;
         this.props = props;
 
+        /*!!!!
         try {
             dataAccess.setup(
                 getProperty("db.driver"),
@@ -37,7 +38,7 @@ public final class Configuration {
         }
         catch (Exception e) {
             throw new ConfigurationException(e.getMessage(), e);
-        }
+        }*/
     }
 
     public String getContextPath() {

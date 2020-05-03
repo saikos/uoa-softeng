@@ -19,12 +19,15 @@ public class SystemHealth extends BaseResource {
     @Override
     protected Representation get() throws ResourceException {
 
+        return new JsonMapRepresentation(Map.of("status", "ok"));
+
+        /*!!!!
         try {
             dataAccess.accessDataCheck();
             return new JsonMapRepresentation(Map.of("status", "ok"));
         } catch (DataAccessException e) {
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "Data access exception: " + e.getMessage(), e);
-        }
+        }*/
     }
 
 }
