@@ -1,14 +1,11 @@
 package gr.uoa.di.softeng.client;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import gr.uoa.di.softeng.data.model.Incident;
-import gr.uoa.di.softeng.data.model.Report;
 import gr.uoa.di.softeng.data.model.User;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -20,17 +17,20 @@ import java.util.stream.Collectors;
  */
 public class ClientHelper {
 
-    public static String encode(Map<String, String> data) {
+    public static String encode(Map<String, Object> data) {
 
         var builder = new StringBuilder();
 
-        for (Map.Entry<String, String> entry : data.entrySet()) {
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            if (entry.getValue() == null) {
+                continue;
+            }
             if (builder.length() > 0) {
                 builder.append("&");
             }
             builder.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8));
             builder.append("=");
-            builder.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
+            builder.append(URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8));
         }
 
         return builder.toString();
@@ -46,39 +46,25 @@ public class ClientHelper {
         return parseJsonAndGetValueOfField(reader, "token");
     }
 
-    static List<User> parseJsonUsers(Reader reader) {
-
-        return new Gson().fromJson(reader, List.class);
-    }
-
     static User parseJsonUser(Reader reader) {
 
         return new Gson().fromJson(reader, User.class);
     }
 
-    static List<Incident> parseJsonIncidents(Reader reader) {
+    static List<User> parseJsonUsers(Reader reader) {
 
         return new Gson().fromJson(reader, List.class);
     }
 
     static Incident parseJsonIncident(Reader reader) {
 
-        return new Gson().fromJson(reader, Incident.class);
+        // Set the date format to that of "new java.util.Date().toString()".
+        return new GsonBuilder().setDateFormat("MMM d, yyyy, h:mm:ss a").create().fromJson(reader, Incident.class);
     }
 
-    static List<Report> parseJsonReports(Reader reader) {
+    static List<Incident> parseJsonIncidents(Reader reader) {
 
         return new Gson().fromJson(reader, List.class);
-    }
-
-    static Report parseJsonReport(Reader reader) {
-
-        return new Gson().fromJson(reader, Report.class);
-    }
-
-    static ImportResult parseJsonImportResult(Reader reader) {
-
-        return new Gson().fromJson(reader, ImportResult.class);
     }
 
     static String readContents(InputStream inputStream) {

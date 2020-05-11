@@ -7,14 +7,10 @@ import static gr.uoa.di.softeng.client.RestAPI.BASE_URL
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import com.github.tomakehurst.wiremock.matching.MultipartValuePatternBuilder
 import com.google.gson.Gson
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.time.LocalDate
 import static com.github.tomakehurst.wiremock.client.WireMock.*
 
 /**
@@ -119,20 +115,20 @@ class RestAPISpecification extends Specification {
         )
 
         when:
-        User user = caller1.addUser(tempUserInfo.username, tempUserInfo.password, tempUserInfo.firstName,
+        User createdUser = caller1.addUser(tempUserInfo.username, tempUserInfo.password, tempUserInfo.firstName,
             tempUserInfo.lastName, tempUserInfo.role, tempUserInfo.agency)
-        println(user)
 
         then:
-        user.getUsername()  == tempUserInfo.username  &&
-        user.getPassword()  == tempUserInfo.password  &&
-        user.getFirstName() == tempUserInfo.firstName &&
-        user.getLastName()  == tempUserInfo.lastName  &&
-        user.getRole()      == tempUserInfo.role      &&
-        user.getAgency()    == tempUserInfo.agency
+        createdUser                != null &&
+        createdUser.getUsername()  == tempUserInfo.username  &&
+        createdUser.getPassword()  == tempUserInfo.password  &&
+        createdUser.getFirstName() == tempUserInfo.firstName &&
+        createdUser.getLastName()  == tempUserInfo.lastName  &&
+        createdUser.getRole()      == tempUserInfo.role      &&
+        createdUser.getAgency()    == tempUserInfo.agency
     }
 
-    private static final tempUserNewInfo = tempUserInfo + [ agency: "an_updated_agency" ]
+    private static final tempUserNewInfo = tempUserInfo + [ agency: "updated_agency" ]
 
     def "T. Admin updates the temp user"() {
         given:
@@ -149,16 +145,17 @@ class RestAPISpecification extends Specification {
         )
 
         when:
-        User user = caller1.updateUser(new User(tempUserNewInfo.username, tempUserNewInfo.password,
+        User updatedUser = caller1.updateUser(new User(tempUserNewInfo.username, tempUserNewInfo.password,
             tempUserNewInfo.firstName, tempUserNewInfo.lastName, tempUserNewInfo.role, tempUserNewInfo.agency))
 
         then:
-        user.getUsername()  == tempUserNewInfo.username  &&
-        user.getPassword()  == tempUserNewInfo.password  &&
-        user.getFirstName() == tempUserNewInfo.firstName &&
-        user.getLastName()  == tempUserNewInfo.lastName  &&
-        user.getRole()      == tempUserNewInfo.role      &&
-        user.getAgency()    == tempUserNewInfo.agency
+        updatedUser                != null &&
+        updatedUser.getUsername()  == tempUserNewInfo.username  &&
+        updatedUser.getPassword()  == tempUserNewInfo.password  &&
+        updatedUser.getFirstName() == tempUserNewInfo.firstName &&
+        updatedUser.getLastName()  == tempUserNewInfo.lastName  &&
+        updatedUser.getRole()      == tempUserNewInfo.role      &&
+        updatedUser.getAgency()    == tempUserNewInfo.agency
     }
 
     def "T. Temp user logs in"() {
@@ -180,124 +177,123 @@ class RestAPISpecification extends Specification {
         caller2.isLoggedIn()
     }
 
-    def start = 0, count = 1
-    def mockIncidentInfo = [
-        id: "",
+    private static tempIncidentInfo = [
+        title:       "a_title",
+        x:           123.0,
+        y:           456.0,
+        startDate:   new Date(),
     ]
+
+    def "T. Temp user creates a new incident"() {
+        wms.givenThat(
+            post(
+                urlEqualTo("$BASE_URL/incidents")
+            ).withHeader(
+                RestAPI.CUSTOM_HEADER, equalTo(TOKEN2)
+            ).withRequestBody(
+                equalTo(ClientHelper.encode(tempIncidentInfo))
+            ).willReturn(
+                okJson(new Gson().toJson(tempIncidentInfo + [ id: "a_unique_incident_identifier" ]))
+            )
+        )
+
+        when:
+        Incident createdIncident = caller2.addIncident(tempIncidentInfo.title.toString(), null,
+            tempIncidentInfo.x.toString(), tempIncidentInfo.y.toString(), tempIncidentInfo.startDate.toString(), null)
+
+        then:
+        createdIncident                    != null &&
+        createdIncident.getId()            != null &&
+        createdIncident.getTitle()         == tempIncidentInfo.title &&
+        createdIncident.getDescription()   == null &&
+        createdIncident.getX()             == tempIncidentInfo.x &&
+        createdIncident.getY()             == tempIncidentInfo.y &&
+        createdIncident.getStartDate()     .compareTo((Date)tempIncidentInfo.startDate) &&
+        createdIncident.getEndDate()       == null
+    }
 
     def "T. Temp user retrieves a list of incidents"() {
         given:
         wms.givenThat(
             get(
-                urlEqualTo("$BASE_URL/incidents?start=$start&count=$count")
+                urlEqualTo("$BASE_URL/incidents?start=0&count=1")
             ).withHeader(
                 RestAPI.CUSTOM_HEADER, equalTo(TOKEN2)
             ).willReturn(
-                okJson(new Gson().toJson([ mockIncidentInfo ]))
+                okJson(new Gson().toJson([ tempIncidentInfo ]))
             )
         )
 
         when:
-        List<Incident> incidents = caller2.getIncidents(new Limits(start, count))
+        List<Incident> incidents = caller2.getIncidents(new Limits(0, 1))
 
         then:
         incidents.size() == 1
+    }
+
+    private static final tempIncidentNewInfo = [ id: "1234" ] + tempIncidentInfo + [ description: "updated_description" ]
+
+    def "T. Temp user updates an incident"() {
+        given:
+        wms.givenThat(
+            put(
+                urlEqualTo("$BASE_URL/incidents/${tempIncidentNewInfo.id}")
+            ).withHeader(
+                RestAPI.CUSTOM_HEADER, equalTo(TOKEN2)
+            ).withRequestBody(
+                equalTo(ClientHelper.encode(tempIncidentNewInfo))
+            ).willReturn(
+                okJson(new Gson().toJson(tempIncidentNewInfo))
+            )
+        )
+
+        when:
+        Incident updatedIncident = caller2.updateIncident(new Incident(tempIncidentNewInfo.id.toString(),
+            tempIncidentNewInfo.title.toString(), tempIncidentNewInfo.description.toString(),
+            (Double)tempIncidentNewInfo.x, (Double)tempIncidentNewInfo.y, (Date)tempIncidentNewInfo.startDate, null))
+
+        then:
+        updatedIncident                     != null &&
+        updatedIncident.getId()             == tempIncidentNewInfo.id &&
+        updatedIncident.getTitle()          == tempIncidentNewInfo.title &&
+        updatedIncident.getDescription()    == tempIncidentNewInfo.description &&
+        updatedIncident.getX()              == tempIncidentNewInfo.x &&
+        updatedIncident.getY()              == tempIncidentNewInfo.y &&
+        updatedIncident.getStartDate()      .compareTo((Date)tempIncidentInfo.startDate) &&
+        updatedIncident.getEndDate()        == null
     }
 
     def "T. Temp user retrieves an incident"() {
         given:
         wms.givenThat(
             get(
-                urlEqualTo("$BASE_URL/incidents/${mockIncidentInfo.id}")
+                urlEqualTo("$BASE_URL/incidents/${tempIncidentNewInfo.id}")
             ).withHeader(
                 RestAPI.CUSTOM_HEADER, equalTo(TOKEN2)
             ).willReturn(
-                okJson('{"username":"user", "email":"email"}')
+                okJson(new Gson().toJson(tempIncidentNewInfo))
             )
         )
 
         when:
-        Incident incident = caller2.getIncident(mockIncidentInfo.id)
+        Incident incident = caller2.getIncident(tempIncidentNewInfo.id.toString())
 
         then:
-        incident != null
+        incident != null &&
+        incident.getId()             == tempIncidentNewInfo.id &&
+        incident.getTitle()          == tempIncidentNewInfo.title &&
+        incident.getDescription()    == tempIncidentNewInfo.description &&
+        incident.getX()              == tempIncidentNewInfo.x &&
+        incident.getY()              == tempIncidentNewInfo.y &&
+        incident.getStartDate()      .compareTo((Date)tempIncidentInfo.startDate) &&
+        incident.getEndDate()        == null
     }
 
-    def "T. Temp user creates a new incident report"() {
-        given:
-        wms.givenThat(
-            get(
-                urlEqualTo("$BASE_URL/...")
-            ).withHeader(
-                RestAPI.CUSTOM_HEADER, equalTo(TOKEN2)
-            ).willReturn(
-                aResponse().withStatus(402)
-            )
-        )
-
-        when:
-        true
-
-        then:
-        ServerResponseException exception = thrown()
-        exception.getStatusCode() == 402
-    }
-
-    def "T. Temp user retrieves an incident report"() {
-        given:
-        wms.givenThat(
-            put(
-                urlEqualTo("$BASE_URL/admin/users/user")
-            ).withHeader(
-                RestAPI.CUSTOM_HEADER, equalTo(TOKEN1)
-            ).withRequestBody(
-                equalTo(ClientHelper.encode([email:"email"]))
-            ).willReturn(
-                okJson('{"username":"user", "email":"email"}')
-            )
-        )
-
-        when:
-        true
-
-        then:
-        true
-    }
-
-
-    def "T. Temp user updates an incident report"() {
-        given:
-        String csv = Paths.get(getClass().getResource("/test.csv").toURI()).toString()
-        wms.givenThat(
-            post(
-                urlEqualTo("$BASE_URL/...")
-            ).withHeader(
-                RestAPI.CUSTOM_HEADER, equalTo(TOKEN2)
-            ).withMultipartRequestBody(
-                new MultipartValuePatternBuilder().
-                    withName("file").
-                    withBody(
-                        binaryEqualTo(
-                            Base64.mimeEncoder.encode(new File(csv).getBytes())
-                        )
-                    )
-            ).willReturn(
-                okJson('')
-            )
-        )
-
-        when:
-        true
-
-        then:
-        true
-    }
-
-    def "T. Temp user deletes an incident report"() {
+    def "T. Temp user deletes an incident"() {
         given:
         wms.givenThat(
             delete(
-                urlEqualTo("$BASE_URL/incidents/${ID}/reports/${ID}")
+                urlEqualTo("$BASE_URL/incidents/${tempIncidentNewInfo.id}")
             ).withHeader(
                 RestAPI.CUSTOM_HEADER, equalTo(TOKEN2)
             ).willReturn(
@@ -306,28 +302,10 @@ class RestAPISpecification extends Specification {
         )
 
         when:
-        String status = caller2.deleteReport(incidentId, reportId)
+        String status = caller2.deleteIncident(tempIncidentNewInfo.id.toString())
 
         then:
         status == "OK"
-    }
-
-    def "file/{id}"() {
-        given:
-        wms.givenThat(
-            get(
-                urlEqualTo("$BASE_URL/...")
-            ).willReturn(
-                aResponse().withStatus(401)
-            )
-        )
-
-        when:
-        true
-
-        then:
-        ServerResponseException exception = thrown()
-        exception.getStatusCode() == 401
     }
 
     def "T. Temp user logs out"() {

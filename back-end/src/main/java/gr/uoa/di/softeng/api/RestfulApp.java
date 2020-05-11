@@ -1,6 +1,6 @@
 package gr.uoa.di.softeng.api;
 
-import gr.uoa.di.softeng.api.resource.*;
+import gr.uoa.di.softeng.api.resources.*;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.Method;
@@ -39,11 +39,6 @@ public class RestfulApp extends Application {
         router.attach("/incidents", Incidents.class);
         // CRUD actions on "incident" resource.
         router.attach("/incidents/{incidentId}", Incident.class);
-
-        // CRUD actions on "reports" resource.
-        router.attach("/incidents/{incidentId}/reports", Reports.class);
-        // CRUD actions on "report" resource.
-        router.attach("/incidents/{incidentId}/reports/{reportId}", Report.class);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // Enable CORS for all origins (don't use this in a production service).

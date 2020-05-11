@@ -1,5 +1,6 @@
-package gr.uoa.di.softeng.api.resource;
+package gr.uoa.di.softeng.api.resources;
 
+import gr.uoa.di.softeng.api.BaseResource;
 import gr.uoa.di.softeng.api.representation.JsonMapRepresentation;
 import gr.uoa.di.softeng.conf.Configuration;
 import gr.uoa.di.softeng.data.DataAccess;
@@ -19,15 +20,13 @@ public class SystemHealth extends BaseResource {
     @Override
     protected Representation get() throws ResourceException {
 
-        return new JsonMapRepresentation(Map.of("status", "ok"));
-
-        /*!!!!
         try {
             dataAccess.accessDataCheck();
             return new JsonMapRepresentation(Map.of("status", "ok"));
-        } catch (DataAccessException e) {
+        }
+        catch (DataAccessException e) {
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "Data access exception: " + e.getMessage(), e);
-        }*/
+        }
     }
 
 }

@@ -1,5 +1,6 @@
-package gr.uoa.di.softeng.api.resource;
+package gr.uoa.di.softeng.api.resources;
 
+import gr.uoa.di.softeng.api.BaseResource;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;

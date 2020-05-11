@@ -6,7 +6,7 @@ package gr.uoa.di.softeng.data.model;
 public class User {
 
     private String username;
-    private String plain_password_not_safe;
+    private String password;
     private String firstName;
     private String lastName;
     private String role;
@@ -27,24 +27,24 @@ public class User {
         setAgency(agency);
     }
 
-    public String getUsername() {
-
-        return username;
-    }
-
     public void setUsername(String username) {
 
         this.username = username;
     }
 
+    public String getUsername() {
+
+        return username;
+    }
+
     public void setPassword(String password) {
 
-        this.plain_password_not_safe = password;
+        this.password = password;
     }
 
     public String getPassword() {
 
-        return plain_password_not_safe;
+        return password;
     }
 
     public void setFirstName(String firstName) {

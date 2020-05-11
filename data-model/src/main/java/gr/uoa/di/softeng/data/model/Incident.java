@@ -1,7 +1,6 @@
 package gr.uoa.di.softeng.data.model;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -15,23 +14,21 @@ public class Incident {
     private Date endDate;
     private Double x;
     private Double y;
-    private List<Report> reports;
 
     public Incident() {
 
         // Keep this for json encoding/decoding.
     }
 
-    public Incident(String id, String title, String description, Date startDate, Date endDate, Double x, Double y,
-                    List<Report> reports) {
+    public Incident(String id, String title, String description, Double x, Double y, Date startDate, Date endDate) {
 
         setId(id);
         setTile(title);
         setDescription(description);
-        setStartDate(startDate);
-        setEndDate(endDate);
         setX(x);
         setY(y);
+        setStartDate(startDate);
+        setEndDate(endDate);
     }
 
     public void setId(String id) {
@@ -64,26 +61,6 @@ public class Incident {
         return description;
     }
 
-    public void setStartDate(Date startDate) {
-
-        this.startDate = startDate;
-    }
-
-    public Date getStartDate() {
-
-        return startDate;
-    }
-
-    public void setEndDate(Date endDate) {
-
-        this.endDate = endDate;
-    }
-
-    public Date getEndDate() {
-
-        return endDate;
-    }
-
     public void setX(Double x) {
 
         this.x = x;
@@ -104,14 +81,24 @@ public class Incident {
         return y;
     }
 
-    public void setReports(List<Report> reports) {
+    public void setStartDate(Date startDate) {
 
-        this.reports = reports;
+        this.startDate = startDate;
     }
 
-    public List<Report> getReports() {
+    public Date getStartDate() {
 
-        return reports;
+        return startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+
+        this.endDate = endDate;
+    }
+
+    public Date getEndDate() {
+
+        return endDate;
     }
 
 }

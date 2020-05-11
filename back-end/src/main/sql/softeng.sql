@@ -33,7 +33,7 @@ USE `softeng`;
 DROP TABLE IF EXISTS `incidents`;
 CREATE TABLE `incidents` (
   `id` int(11) NOT NULL,
-  `name` varchar(256) NOT NULL,
+  `title` varchar(256) NOT NULL,
   `description` text DEFAULT NULL,
   `creation_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -47,7 +47,7 @@ TRUNCATE TABLE `incidents`;
 -- Dumping data for table `incidents`
 --
 
-INSERT INTO `incidents` (`id`, `name`, `description`, `creation_date`) VALUES
+INSERT INTO `incidents` (`id`, `title`, `description`, `creation_date`) VALUES
 (1, 'Τροχαίο', 'Τροχαίο στη συμβολή Ακαδημίας και Πανεπιστημίου', '2020-03-25 13:01:00'),
 (2, 'Τροχαίο', 'Τροχαίο στη συμβολή Χαριλάου Τρικούπη και Ιπποκράτους, ΕΚΑΒ', '2020-03-25 13:02:00'),
 (3, 'Πυρκαγιά', 'Πυρκαγιά σε ταράτσα υπογείου', '2020-03-25 13:03:00');
@@ -61,7 +61,7 @@ INSERT INTO `incidents` (`id`, `name`, `description`, `creation_date`) VALUES
 --
 ALTER TABLE `incidents`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `name` (`name`);
+  ADD KEY `title` (`title`);
 
 --
 -- AUTO_INCREMENT for dumped tables

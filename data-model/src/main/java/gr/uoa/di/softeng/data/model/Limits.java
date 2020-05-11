@@ -5,14 +5,15 @@ package gr.uoa.di.softeng.data.model;
  */
 public class Limits {
 
-    public static final int DEFAULT_COUNT = 10;
+    private static final long DEFAULT_START = 0L;
+    private static final int DEFAULT_COUNT = 10;
 
     private final long start;
     private final int count;
 
     public Limits() {
 
-        this(0L);
+        this(DEFAULT_START, DEFAULT_COUNT);
     }
 
     public Limits(Long start) {
@@ -22,8 +23,8 @@ public class Limits {
 
     public Limits(Long start, Integer count) {
 
-        this.start = start;
-        this.count = count;
+        this.start = start == null ? DEFAULT_START : start;
+        this.count = count == null ? DEFAULT_COUNT : count;
     }
 
     public long getStart() {

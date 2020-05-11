@@ -1,4 +1,4 @@
-package gr.uoa.di.softeng.api.resource;
+package gr.uoa.di.softeng.api;
 
 import gr.uoa.di.softeng.api.representation.Format;
 import org.restlet.data.Status;
@@ -12,11 +12,11 @@ import java.util.Optional;
 /**
  *
  */
-public class BaseResource extends ServerResource {
+public abstract class BaseResource extends ServerResource {
 
     private static final String EMPTY_STRING = "";
 
-    static Format parseFormat(String format) {
+    protected static Format parseFormat(String format) {
 
         Optional<Format> optional = Arrays.stream(Format.values()).
             filter((Format f) -> f.name().equalsIgnoreCase(format)).
@@ -43,7 +43,7 @@ public class BaseResource extends ServerResource {
         return value;
     }
 
-    static String sanitize(String s) {
+    private static String sanitize(String s) {
 
         return s == null ? EMPTY_STRING : s.trim();
     }
