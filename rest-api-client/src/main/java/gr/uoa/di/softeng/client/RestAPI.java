@@ -67,7 +67,7 @@ public class RestAPI {
             throw new RuntimeException(e.getMessage());
         }
 
-        this.urlPrefix = "https://" + host + ":" + port + BASE_URL;
+        this.urlPrefix = "http://" + host + ":" + port + BASE_URL;
     }
 
     public boolean isLoggedIn() {
