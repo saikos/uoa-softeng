@@ -348,7 +348,6 @@ public class RestAPI {
             System.out.println("Sending " + request.method() + " to " + request.uri());
             HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
             int statusCode = response.statusCode();
-            System.out.println(">>> " + statusCode);
             if (statusCode == 200) {
                 try {
                     if (bodyProcessor != null) {
