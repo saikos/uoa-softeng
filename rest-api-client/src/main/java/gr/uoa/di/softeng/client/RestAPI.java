@@ -54,11 +54,14 @@ public class RestAPI {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public RestAPI() throws RuntimeException {
-
-        this("localhost", 9000);
+        this(null);
     }
 
-    public RestAPI(String host, int port) throws RuntimeException {
+    public RestAPI(String token) throws RuntimeException {
+        this("localhost", 9000, token);
+    }
+
+    public RestAPI(String host, int port, String token) throws RuntimeException {
 
         try {
             this.client = newHttpClient();
@@ -67,7 +70,8 @@ public class RestAPI {
             throw new RuntimeException(e.getMessage());
         }
 
-        this.urlPrefix = "http://" + host + ":" + port + BASE_URL;
+        this.urlPrefix = "https://" + host + ":" + port + BASE_URL;
+        this.token = token;
     }
 
     public boolean isLoggedIn() {
@@ -93,7 +97,7 @@ public class RestAPI {
         );
     }
 
-    public void login(String username, String password) {
+    public String login(String username, String password) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("username", username);
@@ -103,6 +107,8 @@ public class RestAPI {
             () -> newPostRequest(getLoginResourceUrl(), URL_ENCODED, ofUrlEncodedFormData(formData)),
             ClientHelper::parseJsonToken
         );
+
+        return token;
     }
 
     public void logout() {
