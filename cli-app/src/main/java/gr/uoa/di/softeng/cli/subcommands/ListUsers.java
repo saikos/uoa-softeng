@@ -13,9 +13,9 @@ import static picocli.CommandLine.Command;
  *
  */
 @Command(
-    name="users"
+    name="list-users"
 )
-public class Users extends LimitsCliArgs implements Callable<Integer> {
+public class ListUsers extends LimitsCliArgs implements Callable<Integer> {
 
     @Override
     public Integer call() {
@@ -28,11 +28,10 @@ public class Users extends LimitsCliArgs implements Callable<Integer> {
         }
 
         try {
-            RestAPI restApi = new RestAPI();
-            // Login always succeeds because "gr.uoa.di.softeng.api.resources.Login" always returns a "successful login"
-            // dummy token.
-            restApi.login("admin", "admin_password");
+            // Read the token from a user's file.
+            RestAPI restApi = new RestAPI(token);
             List<User> users = restApi.getUsers(new Limits(start, count));
+            // TODO: Print the users 
             System.out.println("Fetched " + users.size() + " users records");
             return 0;
         }

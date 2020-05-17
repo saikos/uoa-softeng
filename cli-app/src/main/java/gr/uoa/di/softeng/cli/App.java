@@ -1,8 +1,7 @@
 package gr.uoa.di.softeng.cli;
 
-import gr.uoa.di.softeng.cli.subcommands.Incidents;
 import gr.uoa.di.softeng.cli.subcommands.HealthCheck;
-import gr.uoa.di.softeng.cli.subcommands.Users;
+import gr.uoa.di.softeng.cli.subcommands.ListUsers;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -18,13 +17,13 @@ import static picocli.CommandLine.*;
  *
  */
 @Command(
-    name="ccenter",
+    name="control-center",
     mixinStandardHelpOptions = true,
-    version = "ccenter 0.1",
+    version = "0.1",
     subcommands = {
-        HealthCheck.class,
-        Incidents.class,
-        Users.class
+        HealthCheck.class,        
+        ListUsers.class
+        // TODO: Add your additional sub-command classes here
     }
 )
 public class App implements Callable<Integer> {
