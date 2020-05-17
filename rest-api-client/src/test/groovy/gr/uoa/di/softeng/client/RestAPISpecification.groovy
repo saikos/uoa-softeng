@@ -24,8 +24,8 @@ class RestAPISpecification extends Specification {
     private static final int MOCK_SERVER_PORT = 9001
 
     @Shared WireMockServer wms
-    @Shared RestAPI caller1 = new RestAPI("localhost", MOCK_SERVER_PORT)
-    @Shared RestAPI caller2 = new RestAPI("localhost", MOCK_SERVER_PORT)
+    @Shared RestAPI caller1 = new RestAPI("localhost", MOCK_SERVER_PORT, null)
+    @Shared RestAPI caller2 = new RestAPI("localhost", MOCK_SERVER_PORT, null)
 
     def setupSpec() {
         wms = new WireMockServer(WireMockConfiguration.options().httpsPort(MOCK_SERVER_PORT))
