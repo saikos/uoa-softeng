@@ -29,7 +29,7 @@ public class ListUsers extends LimitsCliArgs implements Callable<Integer> {
 
         try {
             // Read the token from a user's file.
-            RestAPI restApi = new RestAPI(token);
+            RestAPI restApi = new RestAPI("token");
             List<User> users = restApi.getUsers(new Limits(start, count));
             // TODO: Print the users 
             System.out.println("Fetched " + users.size() + " users records");

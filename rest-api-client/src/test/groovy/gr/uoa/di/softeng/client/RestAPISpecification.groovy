@@ -36,7 +36,7 @@ class RestAPISpecification extends Specification {
         wms.stop()
     }
 
-    def "T. Health check status is OK"() {
+    def "T01. Health check status is OK"() {
         given:
         wms.givenThat(
             get(
@@ -53,7 +53,7 @@ class RestAPISpecification extends Specification {
         status == "OK"
     }
 
-    def "T. The database is reset successfully"() {
+    def "T02. The database is reset successfully"() {
         given:
         wms.givenThat(
             post(
@@ -72,7 +72,7 @@ class RestAPISpecification extends Specification {
 
     private static final adminUserLoginInfo = [ username: "admin", password: "pass123!" ]
 
-    def "T. Admin logs in successfully"() {
+    def "T03. Admin logs in successfully"() {
         given:
         wms.givenThat(
             post(
@@ -100,7 +100,7 @@ class RestAPISpecification extends Specification {
         agency:     "an_agency",
     ]
 
-    def "T. Admin creates a temp user"() {
+    def "T04. Admin creates a temp user"() {
         given:
         wms.givenThat(
             post(
@@ -130,7 +130,7 @@ class RestAPISpecification extends Specification {
 
     private static final tempUserNewInfo = tempUserInfo + [ agency: "updated_agency" ]
 
-    def "T. Admin updates the temp user"() {
+    def "T05. Admin updates the temp user"() {
         given:
         wms.givenThat(
             put(
@@ -158,7 +158,7 @@ class RestAPISpecification extends Specification {
         updatedUser.getAgency()    == tempUserNewInfo.agency
     }
 
-    def "T. Temp user logs in"() {
+    def "T06. Temp user logs in"() {
         given:
         wms.givenThat(
             post(
@@ -184,7 +184,7 @@ class RestAPISpecification extends Specification {
         startDate:   new Date(),
     ]
 
-    def "T. Temp user creates a new incident"() {
+    def "T07. Temp user creates a new incident"() {
         wms.givenThat(
             post(
                 urlEqualTo("$BASE_URL/incidents")
@@ -212,7 +212,7 @@ class RestAPISpecification extends Specification {
         createdIncident.getEndDate()       == null
     }
 
-    def "T. Temp user retrieves a list of incidents"() {
+    def "T08. Temp user retrieves a list of incidents"() {
         given:
         wms.givenThat(
             get(
@@ -233,7 +233,7 @@ class RestAPISpecification extends Specification {
 
     private static final tempIncidentNewInfo = [ id: "1234" ] + tempIncidentInfo + [ description: "updated_description" ]
 
-    def "T. Temp user updates an incident"() {
+    def "T09. Temp user updates an incident"() {
         given:
         wms.givenThat(
             put(
@@ -263,7 +263,7 @@ class RestAPISpecification extends Specification {
         updatedIncident.getEndDate()        == null
     }
 
-    def "T. Temp user retrieves an incident"() {
+    def "T10. Temp user retrieves an incident"() {
         given:
         wms.givenThat(
             get(
@@ -289,7 +289,7 @@ class RestAPISpecification extends Specification {
         incident.getEndDate()        == null
     }
 
-    def "T. Temp user deletes an incident"() {
+    def "T11. Temp user deletes an incident"() {
         given:
         wms.givenThat(
             delete(
@@ -308,7 +308,7 @@ class RestAPISpecification extends Specification {
         status == "OK"
     }
 
-    def "T. Temp user logs out"() {
+    def "T12. Temp user logs out"() {
         given:
         wms.givenThat(
             post(
@@ -325,7 +325,7 @@ class RestAPISpecification extends Specification {
         !caller2.isLoggedIn()
     }
 
-    def "T. Admin deletes the temp user"() {
+    def "T13. Admin deletes the temp user"() {
         given:
         wms.givenThat(
             delete(
@@ -344,7 +344,7 @@ class RestAPISpecification extends Specification {
         status == "OK"
     }
 
-    def "T. Admin logs out"() {
+    def "T14. Admin logs out"() {
         given:
         wms.givenThat(
             post(

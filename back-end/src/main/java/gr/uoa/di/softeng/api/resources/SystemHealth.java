@@ -22,7 +22,7 @@ public class SystemHealth extends BaseResource {
 
         try {
             dataAccess.accessDataCheck();
-            return new JsonMapRepresentation(Map.of("status", "ok"));
+            return new JsonMapRepresentation(Map.of("status", "OK"));
         }
         catch (DataAccessException e) {
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "Data access exception: " + e.getMessage(), e);
