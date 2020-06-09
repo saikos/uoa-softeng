@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "username": "username_1",
+      "password": "a_password",
+      "firstName": "a_name",
+      "lastName": "a_surname",
+      "role": "a_role",
+      "agency": "an_agency"
+    },
+    {
+      "username": "username_2",
+      "password": "a_password",
+      "firstName": "a_name",
+      "lastName": "a_surname",
+      "role": "a_role",
+      "agency": "an_agency"
+    },
+    {
+      "username": "username_3",
+      "password": "a_password",
+      "firstName": "a_name",
+      "lastName": "a_surname",
+      "role": "a_role",
+      "agency": "an_agency"
+    }
+  ]
+}

@@ -42,6 +42,15 @@ dependencies {
     gretty 'mysql:mysql-connector-java:8.0.18'                 // Make sure it is also available to the gretty plugin
 }
 
+test {
+    systemProperties(System.getProperties())
+    exclude 'gr.uoa.di.softeng.client.RestAPISpecification'
+
+    testLogging {
+        showStandardStreams = true // Enable system out,err
+    }
+}
+
 gretty {
     // scanInterval = 0 // Disable hot deployment
     // servletContainer = 'tomcat8' // Use the default (jetty)
@@ -52,5 +61,5 @@ gretty {
     httpsPort = 9000
     contextPath = ''
 
-    integrationTestTask = 'test'
+    // integrationTestTask = 'test' // Uncomment to run tests on each appRun.
 }
