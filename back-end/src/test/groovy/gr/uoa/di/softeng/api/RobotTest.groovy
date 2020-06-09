@@ -115,7 +115,7 @@ class RobotTest extends Specification {
         }
 
         then:
-        deletionResponses.every { it == "ok" }
+        deletionResponses.every { it == "OK" }
 
         when:
         def fetchedUsers = caller1.getUsers()
@@ -164,7 +164,7 @@ class RobotTest extends Specification {
         }
 
         then:
-        deletionResponses.every { it == "ok" }
+        deletionResponses.every { it == "OK" }
     }
 
     def "RT09. Admin logs out"() {

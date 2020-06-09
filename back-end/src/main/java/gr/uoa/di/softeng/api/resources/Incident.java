@@ -74,7 +74,7 @@ public class Incident extends BaseResource {
 
         try {
             dataAccess.deleteIncident(incidentId);
-            return new JsonMapRepresentation(Map.of("status", "ok"));
+            return new JsonMapRepresentation(Map.of("status", "OK"));
         }
         catch (Exception e) {
             // Handle exception more carefully. Log error message. Do not externalize error cause by default.
