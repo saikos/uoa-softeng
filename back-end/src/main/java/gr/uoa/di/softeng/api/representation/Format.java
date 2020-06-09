@@ -66,8 +66,8 @@ public enum Format implements RepresentationGenerator {
             try {
                 w.beginObject(); // {
                 w.name("username").value(user.getUsername());
-                w.name("first_name").value(user.getFirstName());
-                w.name("last_name").value(user.getLastName());
+                w.name("firstName").value(user.getFirstName());
+                w.name("lastName").value(user.getLastName());
                 w.name("role").value(user.getRole());
                 w.name("agency").value(user.getAgency());
                 w.endObject(); // }
@@ -87,8 +87,8 @@ public enum Format implements RepresentationGenerator {
                 w.name("description").value(incident.getDescription());
                 w.name("x").value(incident.getX().toString());
                 w.name("y").value(incident.getY().toString());
-                w.name("start_date").value(incident.getStartDate() == null ? null : incident.getStartDate().toString());
-                w.name("end_date").value(incident.getEndDate() == null ? null : incident.getEndDate().toString());
+                w.name("startDate").value(incident.getStartDate() == null ? null : incident.getStartDate().toString());
+                w.name("endDate").value(incident.getEndDate() == null ? null : incident.getEndDate().toString());
                 w.endObject(); // }
                 w.flush();
             }
