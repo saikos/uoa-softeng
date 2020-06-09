@@ -8,6 +8,7 @@ import gr.uoa.di.softeng.data.model.User;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,7 +54,21 @@ public class ClientHelper {
 
     static List<User> parseJsonUsers(Reader reader) {
 
-        return new Gson().fromJson(reader, List.class);
+        List<Map<String,Object>> parsedJsonUsers = new Gson().fromJson(reader, List.class);
+        List<User> users = new ArrayList<>();
+
+        parsedJsonUsers.forEach(parsedJsonUser -> {
+            users.add(new User(
+                parsedJsonUser.get("username").toString(),
+                null, // API does not return user password.
+                parsedJsonUser.get("firstName").toString(),
+                parsedJsonUser.get("lastName").toString(),
+                parsedJsonUser.get("role").toString(),
+                parsedJsonUser.get("agency").toString()
+            ));
+        });
+
+        return users;
     }
 
     static Incident parseJsonIncident(Reader reader) {
