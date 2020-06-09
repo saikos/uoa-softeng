@@ -196,7 +196,7 @@ public class RestAPI {
         formData.put("title", title);
         formData.put("x", x);
         formData.put("y", y);
-        // All user fields must be explicitly initialized.
+        // Optional incident fields.
         if(startDate != null)   formData.put("startDate", startDate);
         if(endDate != null)     formData.put("endDate", endDate);
         if(description != null) formData.put("description", description);
