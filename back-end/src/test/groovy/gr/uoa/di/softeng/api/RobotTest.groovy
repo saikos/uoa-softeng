@@ -7,12 +7,21 @@ import groovy.json.JsonSlurper
 import spock.lang.Specification
 import spock.lang.Stepwise
 import spock.lang.Shared
+import spock.lang.IgnoreIf
 
 /**
- *
+ * Invoke this test using 
+  
+  ./gradlew :test --tests "*RobotTest" -DtestJson=/path/to/json
+
+ * The test json file located at src/test/resources/RobotTestData.json will be used
+ * during the project's evaluation. An additional (not known) test json file will be also used.
  */
+@IgnoreIf({ TEST_JSON == null })
 @Stepwise
 class RobotTest extends Specification {
+
+    private static final String TEST_JSON = System.getProperty("testJson")
 
     @Shared RestAPI caller1 = new RestAPI()
     @Shared RestAPI caller2 = new RestAPI()
@@ -21,7 +30,7 @@ class RobotTest extends Specification {
     def setup() {
 
         try {
-            def robotTestData = new File("src/test/resources/RobotTestData.json")
+            def robotTestData = new File(TEST_JSON)
             json = new JsonSlurper().parseText(robotTestData.text)
         }
         catch(ex) {

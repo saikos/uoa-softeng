@@ -61,5 +61,5 @@ gretty {
     httpsPort = 9000
     contextPath = ''
 
-    // integrationTestTask = 'test' // Uncomment to run tests on each appRun.
+    integrationTestTask = 'test'
 }
