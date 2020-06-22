@@ -1,16 +1,18 @@
 package gr.uoa.di.softeng.client
 
+import gr.uoa.di.softeng.data.model.DateFormat
 import gr.uoa.di.softeng.data.model.Incident
 import gr.uoa.di.softeng.data.model.Limits
 import gr.uoa.di.softeng.data.model.User
-import static gr.uoa.di.softeng.client.RestAPI.BASE_URL
-
+import java.text.SimpleDateFormat
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
+import static gr.uoa.di.softeng.client.RestAPI.BASE_URL
 import static com.github.tomakehurst.wiremock.client.WireMock.*
 
 /**
@@ -23,20 +25,25 @@ class RestAPISpecification extends Specification {
     private static final String TOKEN2 = "token2"
     private static final int MOCK_SERVER_PORT = 9001
 
+    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat(DateFormat.CUSTOM)
+
     @Shared WireMockServer wms
     @Shared RestAPI caller1 = new RestAPI("localhost", MOCK_SERVER_PORT, null)
     @Shared RestAPI caller2 = new RestAPI("localhost", MOCK_SERVER_PORT, null)
 
     def setupSpec() {
+
         wms = new WireMockServer(WireMockConfiguration.options().httpsPort(MOCK_SERVER_PORT))
         wms.start()
     }
 
     def cleanupSpec() {
+
         wms.stop()
     }
 
     def "T01. Health check status is OK"() {
+
         given:
         wms.givenThat(
             get(
@@ -54,6 +61,7 @@ class RestAPISpecification extends Specification {
     }
 
     def "T02. The database is reset successfully"() {
+
         given:
         wms.givenThat(
             post(
@@ -73,6 +81,7 @@ class RestAPISpecification extends Specification {
     private static final adminUserLoginInfo = [ username: "admin", password: "pass123!" ]
 
     def "T03. Admin logs in successfully"() {
+
         given:
         wms.givenThat(
             post(
@@ -101,6 +110,7 @@ class RestAPISpecification extends Specification {
     ]
 
     def "T04. Admin creates a temp user"() {
+
         given:
         wms.givenThat(
             post(
@@ -131,6 +141,7 @@ class RestAPISpecification extends Specification {
     private static final tempUserNewInfo = tempUserInfo + [ agency: "updated_agency" ]
 
     def "T05. Admin updates the temp user"() {
+
         given:
         wms.givenThat(
             put(
@@ -159,6 +170,7 @@ class RestAPISpecification extends Specification {
     }
 
     def "T06. Temp user logs in"() {
+
         given:
         wms.givenThat(
             post(
@@ -181,10 +193,12 @@ class RestAPISpecification extends Specification {
         title:       "a_title",
         x:           123.0,
         y:           456.0,
-        startDate:   new Date(),
+        startDate:   dateFormatter.format(new Date()),
     ]
 
     def "T07. Temp user creates a new incident"() {
+
+        given:
         wms.givenThat(
             post(
                 urlEqualTo("$BASE_URL/incidents")
@@ -193,7 +207,11 @@ class RestAPISpecification extends Specification {
             ).withRequestBody(
                 equalTo(ClientHelper.encode(tempIncidentInfo))
             ).willReturn(
-                okJson(new Gson().toJson(tempIncidentInfo + [ id: "a_unique_incident_identifier" ]))
+                okJson(new GsonBuilder().serializeNulls().create().toJson(tempIncidentInfo + [
+                    id: "a_unique_incident_identifier",
+                    description: null,
+                    endDate: null,
+                ]))
             )
         )
 
@@ -208,11 +226,12 @@ class RestAPISpecification extends Specification {
         createdIncident.getDescription()   == null &&
         createdIncident.getX()             == tempIncidentInfo.x &&
         createdIncident.getY()             == tempIncidentInfo.y &&
-        createdIncident.getStartDate()     .compareTo((Date)tempIncidentInfo.startDate) &&
+        createdIncident.getStartDate()     == dateFormatter.parse(tempIncidentInfo.startDate.toString()) &&
         createdIncident.getEndDate()       == null
     }
 
     def "T08. Temp user retrieves a list of incidents"() {
+
         given:
         wms.givenThat(
             get(
@@ -220,7 +239,7 @@ class RestAPISpecification extends Specification {
             ).withHeader(
                 RestAPI.CUSTOM_HEADER, equalTo(TOKEN2)
             ).willReturn(
-                okJson(new Gson().toJson([ tempIncidentInfo ]))
+                okJson(new Gson().toJson([ [ id: "1234" ] + tempIncidentInfo ]))
             )
         )
 
@@ -231,9 +250,17 @@ class RestAPISpecification extends Specification {
         incidents.size() == 1
     }
 
-    private static final tempIncidentNewInfo = [ id: "1234" ] + tempIncidentInfo + [ description: "updated_description" ]
+    private static final tempIncidentNewInfo = [
+        id:          "1234",
+        title:       tempIncidentInfo.title,
+        description: "updated_description",
+        x:           tempIncidentInfo.x,
+        y:           tempIncidentInfo.y,
+        startDate:   tempIncidentInfo.startDate,
+    ]
 
     def "T09. Temp user updates an incident"() {
+
         given:
         wms.givenThat(
             put(
@@ -250,7 +277,8 @@ class RestAPISpecification extends Specification {
         when:
         Incident updatedIncident = caller2.updateIncident(new Incident(tempIncidentNewInfo.id.toString(),
             tempIncidentNewInfo.title.toString(), tempIncidentNewInfo.description.toString(),
-            (Double)tempIncidentNewInfo.x, (Double)tempIncidentNewInfo.y, (Date)tempIncidentNewInfo.startDate, null))
+            (Double)tempIncidentNewInfo.x, (Double)tempIncidentNewInfo.y,
+            dateFormatter.parse(tempIncidentNewInfo.startDate.toString()), null))
 
         then:
         updatedIncident                     != null &&
@@ -259,11 +287,12 @@ class RestAPISpecification extends Specification {
         updatedIncident.getDescription()    == tempIncidentNewInfo.description &&
         updatedIncident.getX()              == tempIncidentNewInfo.x &&
         updatedIncident.getY()              == tempIncidentNewInfo.y &&
-        updatedIncident.getStartDate()      .compareTo((Date)tempIncidentInfo.startDate) &&
+        updatedIncident.getStartDate()      == dateFormatter.parse(tempIncidentInfo.startDate.toString()) &&
         updatedIncident.getEndDate()        == null
     }
 
     def "T10. Temp user retrieves an incident"() {
+
         given:
         wms.givenThat(
             get(
@@ -285,11 +314,12 @@ class RestAPISpecification extends Specification {
         incident.getDescription()    == tempIncidentNewInfo.description &&
         incident.getX()              == tempIncidentNewInfo.x &&
         incident.getY()              == tempIncidentNewInfo.y &&
-        incident.getStartDate()      .compareTo((Date)tempIncidentInfo.startDate) &&
+        incident.getStartDate()      == dateFormatter.parse(tempIncidentInfo.startDate.toString()) &&
         incident.getEndDate()        == null
     }
 
     def "T11. Temp user deletes an incident"() {
+
         given:
         wms.givenThat(
             delete(
@@ -309,6 +339,7 @@ class RestAPISpecification extends Specification {
     }
 
     def "T12. Temp user logs out"() {
+
         given:
         wms.givenThat(
             post(
@@ -326,6 +357,7 @@ class RestAPISpecification extends Specification {
     }
 
     def "T13. Admin deletes the temp user"() {
+
         given:
         wms.givenThat(
             delete(
@@ -345,6 +377,7 @@ class RestAPISpecification extends Specification {
     }
 
     def "T14. Admin logs out"() {
+
         given:
         wms.givenThat(
             post(

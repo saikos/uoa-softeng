@@ -2,13 +2,15 @@ package gr.uoa.di.softeng.client;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import gr.uoa.di.softeng.data.model.DateFormat;
 import gr.uoa.di.softeng.data.model.Incident;
 import gr.uoa.di.softeng.data.model.User;
-
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -73,13 +75,38 @@ public class ClientHelper {
 
     static Incident parseJsonIncident(Reader reader) {
 
-        // Set the date format to that of "new java.util.Date().toString()".
-        return new GsonBuilder().setDateFormat("MMM d, yyyy, h:mm:ss a").create().fromJson(reader, Incident.class);
+        return new GsonBuilder().setDateFormat(DateFormat.CUSTOM).create().fromJson(reader, Incident.class);
     }
 
     static List<Incident> parseJsonIncidents(Reader reader) {
 
-        return new Gson().fromJson(reader, List.class);
+        List<Map<String,Object>> parsedJsonIncidents = new Gson().fromJson(reader, List.class);
+        List<Incident> incidents = new ArrayList<>();
+        SimpleDateFormat formatter = new SimpleDateFormat(DateFormat.CUSTOM);
+
+        parsedJsonIncidents.forEach(parsedJsonIncident -> {
+            String description = null;
+            Date startDate = null, endDate = null;
+
+            try { description = parsedJsonIncident.get("description").toString(); }
+            catch(Exception ex) {}
+            try { startDate = formatter.parse(parsedJsonIncident.get("startDate").toString()); }
+            catch(Exception ex) {}
+            try { endDate = formatter.parse(parsedJsonIncident.get("endDate").toString()); }
+            catch(Exception ex) {}
+
+            incidents.add(new Incident(
+                parsedJsonIncident.get("id").toString(),
+                parsedJsonIncident.get("title").toString(),
+                description,
+                Double.parseDouble(parsedJsonIncident.get("x").toString()),
+                Double.parseDouble(parsedJsonIncident.get("y").toString()),
+                startDate,
+                endDate
+            ));
+        });
+
+        return incidents;
     }
 
     static String readContents(InputStream inputStream) {

@@ -1,9 +1,9 @@
 package gr.uoa.di.softeng.client;
 
+import gr.uoa.di.softeng.data.model.DateFormat;
 import gr.uoa.di.softeng.data.model.Incident;
 import gr.uoa.di.softeng.data.model.Limits;
 import gr.uoa.di.softeng.data.model.User;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -50,6 +51,8 @@ public class RestAPI {
     private final HttpClient client;
 
     private String token = null; // User is not logged in.
+
+    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat(DateFormat.CUSTOM);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -192,14 +195,16 @@ public class RestAPI {
     public Incident addIncident(String title, String description, String x, String y, String startDate, String endDate) {
 
         Map<String, Object> formData = new LinkedHashMap<>();
-        // Incident's fields that must be explicitly initialized.
         formData.put("title", title);
+        if(description != null) {
+            formData.put("description", description);
+        }
         formData.put("x", x);
         formData.put("y", y);
-        // Optional incident fields.
-        if(startDate != null)   formData.put("startDate", startDate);
-        if(endDate != null)     formData.put("endDate", endDate);
-        if(description != null) formData.put("description", description);
+        formData.put("startDate", startDate);
+        if(endDate != null) {
+            formData.put("endDate", endDate);
+        }
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
             () -> newPostRequest(getIncidentsResourceUrl(), URL_ENCODED, ofUrlEncodedFormData(formData)),
@@ -233,11 +238,11 @@ public class RestAPI {
         Map<String, Object> formData = new LinkedHashMap<>();
         formData.put("id",          incident.getId());
         formData.put("title",       incident.getTitle());
+        formData.put("description", incident.getDescription());
         formData.put("x",           incident.getX());
         formData.put("y",           incident.getY());
-        formData.put("startDate",   incident.getStartDate());
-        formData.put("endDate",     incident.getEndDate());
-        formData.put("description", incident.getDescription());
+        formData.put("startDate",   incident.getStartDate() == null ? null : dateFormatter.format(incident.getStartDate()));
+        formData.put("endDate",     incident.getEndDate()   == null ? null : dateFormatter.format(incident.getEndDate()));
 
         return sendRequestAndParseResponseBodyAsUTF8Text(
             () -> newPutRequest(getIncidentResourceUrl(incident.getId()), URL_ENCODED, ofUrlEncodedFormData(formData)),
