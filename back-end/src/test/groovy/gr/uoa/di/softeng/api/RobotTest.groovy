@@ -1,5 +1,6 @@
 package gr.uoa.di.softeng.api
 
+import gr.uoa.di.softeng.data.model.DateFormat
 import gr.uoa.di.softeng.data.model.Limits
 import gr.uoa.di.softeng.data.model.User
 import gr.uoa.di.softeng.client.RestAPI
@@ -8,6 +9,7 @@ import spock.lang.Specification
 import spock.lang.Stepwise
 import spock.lang.Shared
 import spock.lang.IgnoreIf
+import java.text.SimpleDateFormat
 
 /**
  * Invoke this test using 
@@ -26,6 +28,8 @@ class RobotTest extends Specification {
     @Shared RestAPI caller1 = new RestAPI()
     @Shared RestAPI caller2 = new RestAPI()
     @Shared Object json;
+
+    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat(DateFormat.CUSTOM);
 
     def setup() {
 
@@ -73,16 +77,19 @@ class RobotTest extends Specification {
 
         given:
         List usersData = json.users
+        int OFFSET = (int) json.users_limits.offset
+        int LIMIT = (int) json.users_limits.limit
 
         when:
-        usersData.collect { userData ->
-            String username  = userData.username
-            String password  = userData.password
-            String firstName = userData.firstName
-            String lastName  = userData.lastName
-            String role      = userData.role
-            String agency    = userData.agency
-            caller1.addUser(username, password, firstName, lastName, role, agency)
+        usersData.each { userData ->
+            caller1.addUser(
+                (String) userData.username,
+                (String) userData.password,
+                (String) userData.firstName,
+                (String) userData.lastName,
+                (String) userData.role,
+                (String) userData.agency
+            )
         }
         and:
         def createdUsersAll = caller1.getUsers()
@@ -99,10 +106,10 @@ class RobotTest extends Specification {
         }
 
         when:
-        def createdUsersSome = caller1.getUsers(new Limits(1, 5))
+        def createdUsersSome = caller1.getUsers(new Limits(OFFSET, LIMIT))
 
         then:
-        createdUsersSome.size() == Math.min(Math.max(usersData.size() - 1, 0), 5)
+        createdUsersSome.size() == Math.min(Math.max(usersData.size() - OFFSET, 0), LIMIT)
     }
 
     def "RT05. Admin updates one user and deletes the rest of the users"() {
@@ -155,7 +162,80 @@ class RobotTest extends Specification {
         caller2.isLoggedIn()
     }
 
-    def "RT07. User logs out"() {
+    def "RT07. User manages a list of incidents"() {
+
+        given:
+        List incidentsData = json.incidents
+        int OFFSET = (int) json.incidents_limits.offset
+        int LIMIT = (int) json.incidents_limits.limit
+
+        when:
+        incidentsData.each { incidentData ->
+            caller2.addIncident(
+                (String) incidentData.title,
+                (String) incidentData.description,
+                (String) incidentData.x,
+                (String) incidentData.y,
+                (String) incidentData.startDate,
+                (String) incidentData.endDate
+            )
+        }
+        and:
+        def createdIncidentsAll = caller2.getIncidents()
+
+        then:
+        createdIncidentsAll.size() == incidentsData.size()
+        createdIncidentsAll.indexed().every { index, createdIncident ->
+            def incident = incidentsData[index]
+            createdIncident.getTitle()       == (String) incident.title &&
+            createdIncident.getDescription() == (String) incident.description &&
+            createdIncident.getX()           == (Double) incident.x &&
+            createdIncident.getY()           == (Double) incident.y &&
+            createdIncident.getStartDate()   == dateFormatter.parse((String) incident.startDate) &&
+            createdIncident.getEndDate()     == (incident.endDate ? dateFormatter.parse((String) incident.endDate) : null)
+        }
+
+        when:
+        def incidentsSome = caller2.getIncidents(new Limits(OFFSET, LIMIT))
+        and:
+        def incidentsNone = caller2.getIncidents(new Limits(incidentsData.size(), 10))
+
+        then:
+        incidentsSome.size() == Math.min(Math.max(incidentsData.size() - OFFSET, 0), LIMIT)
+        incidentsNone.size() == 0
+
+        when:
+        def lastIncidentData = incidentsData[incidentsData.size() - 1]
+        def lastIncident = caller2.getIncidents(new Limits(incidentsData.size() - 1, 1))[0]
+        and:
+        def endDate = dateFormatter.parse("2020-01-01 01:01:01.000")
+        lastIncident.setEndDate(endDate)
+        caller2.updateIncident(lastIncident)
+        and:
+        lastIncident = caller2.getIncident(lastIncident.getId())
+
+        then:
+        lastIncident                   != null
+        lastIncident.getTitle()        == (String) lastIncidentData.title
+        lastIncident.getDescription()  == (String) lastIncidentData.description
+        lastIncident.getX()            == (Double) lastIncidentData.x
+        lastIncident.getY()            == (Double) lastIncidentData.y
+        lastIncident.getStartDate()    == dateFormatter.parse((String) lastIncidentData.startDate)
+        lastIncident.getEndDate()      == endDate
+
+        when:
+        def deletionResponses = createdIncidentsAll.collect { incident ->
+            caller1.deleteIncident(incident.getId())
+        }
+        and:
+        def incidentsAll = caller2.getIncidents()
+
+        then:
+        deletionResponses.every { it == "OK" }
+        incidentsAll.size() == 7
+    }
+
+    def "RT08. User logs out"() {
         when:
         caller2.logout()
 
@@ -163,7 +243,7 @@ class RobotTest extends Specification {
         !caller2.isLoggedIn()
     }
 
-    def "RT08. Admin deletes the remaining user"() {
+    def "RT09. Admin deletes the remaining user"() {
 
         when:
         def users = caller1.getUsers()
@@ -176,7 +256,7 @@ class RobotTest extends Specification {
         deletionResponses.every { it == "OK" }
     }
 
-    def "RT09. Admin logs out"() {
+    def "RT10. Admin logs out"() {
         when:
         caller1.logout()
 
